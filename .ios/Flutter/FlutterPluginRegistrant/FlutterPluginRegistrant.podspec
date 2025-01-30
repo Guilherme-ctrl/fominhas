@@ -25,4 +25,6 @@ Depends on all your plugins, and provides a function to register them.
   s.dependency 'google_sign_in_ios'
   s.dependency 'local_auth_darwin'
   s.dependency 'shared_preferences_foundation'
+  s.dependency 'sign_in_apple'
+  s.dependency 'sign_in_with_apple'
 end

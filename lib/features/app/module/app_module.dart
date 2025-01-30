@@ -19,6 +19,7 @@ import 'package:fominhas/features/login/data/datasource/login_datasource_impleme
 import 'package:fominhas/features/login/data/repositories/login_repository_implementation.dart';
 import 'package:fominhas/features/login/domain/repositories/login_repository.dart';
 import 'package:fominhas/features/login/module/login_module.dart';
+import 'package:fominhas/features/login/presentation/cubit/login_apple_cubit.dart';
 import '../../login/presentation/cubit/login_google_cubit.dart';
 
 class AppModule extends Module {
@@ -34,6 +35,7 @@ class AppModule extends Module {
     i.addInstance(FirebaseAuth.instance);
     i.addInstance(FirebaseFirestore.instance);
     i.addSingleton(GetJogadoresCubit.new);
+    i.addSingleton(LoginAppleCubit.new);
 
     i.addSingleton(LoginGoogleCubit.new);
     i.addSingleton(UserCubit.new);

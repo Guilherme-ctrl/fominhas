@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fominhas/features/login/data/datasource/login_datasource.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginDatasourceImplementation implements ILoginDatasource {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -31,5 +32,28 @@ class LoginDatasourceImplementation implements ILoginDatasource {
       throw Exception('Failed to load data');
     }
     return null;
+  }
+
+  @override
+  Future<UserCredential?> loginApple() async {
+    try {
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      final oauthCredential = OAuthProvider("apple.com").credential(
+        idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
+      );
+
+      // Autentica no Firebase com as credenciais da Apple
+      final response = await _auth.signInWithCredential(oauthCredential);
+      return response;
+    } catch (e) {
+      throw Exception('Erro ao fazer login com Apple: ${e.toString()}');
+    }
   }
 }

@@ -5,4 +5,5 @@ import '../../../../core/errors/failure.dart';
 
 abstract class ILoginRepository {
   Future<Either<Failure, UserCredential?>> loginGoogle();
+  Future<Either<Failure, UserCredential?>> loginApple();
 }

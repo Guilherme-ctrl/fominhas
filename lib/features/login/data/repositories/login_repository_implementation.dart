@@ -20,4 +20,16 @@ class LoginRepositoryImplementation implements ILoginRepository {
       return Left(DataPostFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, UserCredential?>> loginApple() async {
+    try {
+      final result = await datasource.loginApple();
+      return Right(result);
+    } on DataPostFailure catch (e) {
+      return Left(e);
+    } catch (e) {
+      return Left(DataPostFailure());
+    }
+  }
 }
