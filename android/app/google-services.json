@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "897934415319",
+    "firebase_url": "https://fominhas-7ee47-default-rtdb.firebaseio.com",
+    "project_id": "fominhas-7ee47",
+    "storage_bucket": "fominhas-7ee47.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:897934415319:android:d9df5a281b7f2730122792",
+        "android_client_info": {
+          "package_name": "com.fominhas.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "897934415319-antv692nckgq2s518h4hqqj4jnb7f495.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fominhas.app",
+            "certificate_hash": "415ab40ae9b7cc4e66d6769cb2c08106e8293b48"
+          }
+        },
+        {
+          "client_id": "897934415319-uksalnjsnsk9oj62elmpeb0ng41ngstc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fominhas.app",
+            "certificate_hash": "3e8d577c15b81ca24e9cb5d912f5f227d035f22d"
+          }
+        },
+        {
+          "client_id": "897934415319-dug1tr3llm99kfoikdcndq23101dac89.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkn-heippU_UP2vlatqGz4iZdjBBjs4Do"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "897934415319-5suth416699ioq66qa3mfl0bvep52o5h.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "897934415319-h3rdp9nhkpabs4k2pudr75flj8q73s7c.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.portalsolutions.fominhas"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:897934415319:android:7865ba8a24b1bd0e122792",
+        "android_client_info": {
+          "package_name": "com.portalsolutions.fominhas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "897934415319-dug1tr3llm99kfoikdcndq23101dac89.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkn-heippU_UP2vlatqGz4iZdjBBjs4Do"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "897934415319-5suth416699ioq66qa3mfl0bvep52o5h.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "897934415319-h3rdp9nhkpabs4k2pudr75flj8q73s7c.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.portalsolutions.fominhas"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
