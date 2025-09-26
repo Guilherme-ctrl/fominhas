@@ -1,0 +1,78 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Release to TestFlight"
+  lane :release_testflight do
+    # Ensure we have a clean git status
+    ensure_git_status_clean
+
+    # Setup code signing
+    setup_ci if ENV['CI']
+    
+    # Get provisioning profiles if using match
+    # match(type: "appstore", readonly: ENV['CI'])
+    
+    # Build the app
+    build_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      configuration: "Release",
+      export_method: "app-store",
+      export_options: {
+        uploadBitcode: false,
+        uploadSymbols: true,
+        compileBitcode: false,
+        manageAppVersionAndBuildNumber: false
+      }
+    )
+
+    # Upload to TestFlight
+    upload_to_testflight(
+      api_key_path: "~/.appstoreconnect/private_keys/AuthKey_#{ENV['APP_STORE_CONNECT_API_KEY_ID']}.p8",
+      skip_waiting_for_build_processing: true
+    )
+    
+    # Clean up build artifacts
+    clean_build_artifacts
+  end
+
+  desc "Setup code signing for CI"
+  lane :setup_certificates do
+    setup_ci if ENV['CI']
+    
+    # Setup match for code signing
+    match(type: "appstore", readonly: false)
+  end
+
+  desc "Run tests"
+  lane :test do
+    scan(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      device: "iPhone 15"
+    )
+  end
+
+  desc "Build app for testing"
+  lane :build_for_testing do
+    build_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      configuration: "Debug"
+    )
+  end
+
+  # Error handling
+  error do |lane, exception|
+    UI.error("❌ Error in lane #{lane}: #{exception.message}")
+    
+    # Clean up if needed
+    clean_build_artifacts if File.exist?("Runner.ipa")
+    
+    # Re-raise the exception to fail the CI
+    raise exception
+  end
+end
