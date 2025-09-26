@@ -56,14 +56,12 @@ class _PlayerFormDialogState extends State<PlayerFormDialog> {
                   },
                 ),
                 const SizedBox(height: 16),
-
                 DropdownButtonFormField<PlayerPosition>(
                   initialValue: _selectedPosition,
                   decoration: const InputDecoration(labelText: 'Posição *', border: OutlineInputBorder()),
-                  items:
-                      _positions.map((position) {
-                        return DropdownMenuItem(value: position, child: Text(_getPositionName(position)));
-                      }).toList(),
+                  items: _positions.map((position) {
+                    return DropdownMenuItem(value: position, child: Text(_getPositionName(position)));
+                  }).toList(),
                   onChanged: (value) {
                     setState(() {
                       _selectedPosition = value!;
@@ -71,7 +69,6 @@ class _PlayerFormDialogState extends State<PlayerFormDialog> {
                   },
                 ),
                 const SizedBox(height: 16),
-
                 TextFormField(
                   controller: _jerseyNumberController,
                   decoration: const InputDecoration(labelText: 'Número da camisa *', border: OutlineInputBorder()),
@@ -88,14 +85,12 @@ class _PlayerFormDialogState extends State<PlayerFormDialog> {
                   },
                 ),
                 const SizedBox(height: 16),
-
                 TextFormField(
                   controller: _emailController,
                   decoration: const InputDecoration(labelText: 'Email', border: OutlineInputBorder()),
                   keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 16),
-
                 TextFormField(
                   controller: _phoneController,
                   decoration: const InputDecoration(labelText: 'Telefone', border: OutlineInputBorder()),

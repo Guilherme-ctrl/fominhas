@@ -47,7 +47,7 @@ class PlayerCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 16),
-              
+
               // Player info
               Expanded(
                 child: Column(
@@ -56,15 +56,15 @@ class PlayerCard extends StatelessWidget {
                     Text(
                       player.name,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       _getPositionName(player.position),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey[600],
-                      ),
+                            color: Colors.grey[600],
+                          ),
                     ),
                     const SizedBox(height: 8),
                     Row(
@@ -91,7 +91,7 @@ class PlayerCard extends StatelessWidget {
                   ],
                 ),
               ),
-              
+
               // Action buttons
               PopupMenuButton(
                 itemBuilder: (context) => [

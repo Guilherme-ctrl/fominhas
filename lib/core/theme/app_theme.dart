@@ -3,31 +3,31 @@ import 'package:flutter/services.dart';
 
 class AppTheme {
   // Core Colors
-  static const Color primaryColor = Color(0xFF00D4AA);      // Teal accent
-  static const Color primaryDark = Color(0xFF00B894);       // Darker teal
-  static const Color secondaryColor = Color(0xFF6C5CE7);    // Purple accent
-  
+  static const Color primaryColor = Color(0xFF00D4AA); // Teal accent
+  static const Color primaryDark = Color(0xFF00B894); // Darker teal
+  static const Color secondaryColor = Color(0xFF6C5CE7); // Purple accent
+
   // Background Colors
-  static const Color backgroundDark = Color(0xFF0D1117);    // Very dark blue-gray
-  static const Color surfaceDark = Color(0xFF161B22);       // Dark surface
-  static const Color cardDark = Color(0xFF21262D);          // Card background
-  
+  static const Color backgroundDark = Color(0xFF0D1117); // Very dark blue-gray
+  static const Color surfaceDark = Color(0xFF161B22); // Dark surface
+  static const Color cardDark = Color(0xFF21262D); // Card background
+
   // Text Colors
-  static const Color textPrimary = Color(0xFFE6EDF3);       // Primary text
-  static const Color textSecondary = Color(0xFF8B949E);     // Secondary text
-  static const Color textTertiary = Color(0xFF656D76);      // Tertiary text
-  
+  static const Color textPrimary = Color(0xFFE6EDF3); // Primary text
+  static const Color textSecondary = Color(0xFF8B949E); // Secondary text
+  static const Color textTertiary = Color(0xFF656D76); // Tertiary text
+
   // Status Colors
-  static const Color successColor = Color(0xFF2EA043);      // Green
-  static const Color warningColor = Color(0xFFD29922);      // Orange
-  static const Color errorColor = Color(0xFFDA3633);        // Red
-  static const Color infoColor = Color(0xFF1F6FEB);         // Blue
-  
+  static const Color successColor = Color(0xFF2EA043); // Green
+  static const Color warningColor = Color(0xFFD29922); // Orange
+  static const Color errorColor = Color(0xFFDA3633); // Red
+  static const Color infoColor = Color(0xFF1F6FEB); // Blue
+
   // Sport Specific Colors
-  static const Color neutralTeamColor = Color(0xFF8B949E);  // Neutral gray for teams
-  static const Color goalColor = Color(0xFF2EA043);         // Green for goals
-  static const Color assistColor = Color(0xFFD29922);       // Orange for assists
-  
+  static const Color neutralTeamColor = Color(0xFF8B949E); // Neutral gray for teams
+  static const Color goalColor = Color(0xFF2EA043); // Green for goals
+  static const Color assistColor = Color(0xFFD29922); // Orange for assists
+
   // Deprecated - keeping for compatibility but using neutral color
   static const Color homeTeamColor = neutralTeamColor;
   static const Color awayTeamColor = neutralTeamColor;
@@ -36,7 +36,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      
+
       // Color Scheme
       colorScheme: ColorScheme.dark(
         primary: primaryColor,
@@ -53,7 +53,7 @@ class AppTheme {
         error: errorColor,
         onError: Colors.white,
       ),
-      
+
       // App Bar Theme
       appBarTheme: AppBarTheme(
         backgroundColor: cardDark,
@@ -67,7 +67,7 @@ class AppTheme {
         iconTheme: const IconThemeData(color: textPrimary),
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
-      
+
       // Card Theme
       cardTheme: CardThemeData(
         color: cardDark,
@@ -77,7 +77,7 @@ class AppTheme {
           borderRadius: BorderRadius.circular(12),
         ),
       ),
-      
+
       // Elevated Button Theme
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -95,7 +95,7 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       // Outlined Button Theme
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
@@ -111,7 +111,7 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       // Text Button Theme
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
@@ -125,7 +125,7 @@ class AppTheme {
           ),
         ),
       ),
-      
+
       // Input Decoration Theme
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -151,7 +151,7 @@ class AppTheme {
         prefixIconColor: textSecondary,
         suffixIconColor: textSecondary,
       ),
-      
+
       // Bottom Navigation Bar Theme
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: cardDark,
@@ -168,7 +168,7 @@ class AppTheme {
         type: BottomNavigationBarType.fixed,
         elevation: 8,
       ),
-      
+
       // Chip Theme
       chipTheme: ChipThemeData(
         backgroundColor: surfaceDark,
@@ -180,7 +180,7 @@ class AppTheme {
           borderRadius: BorderRadius.circular(20),
         ),
       ),
-      
+
       // Dialog Theme
       dialogTheme: DialogThemeData(
         backgroundColor: cardDark,
@@ -197,7 +197,7 @@ class AppTheme {
           fontSize: 16,
         ),
       ),
-      
+
       // SnackBar Theme
       snackBarTheme: SnackBarThemeData(
         backgroundColor: cardDark,
@@ -208,7 +208,7 @@ class AppTheme {
         behavior: SnackBarBehavior.floating,
         elevation: 4,
       ),
-      
+
       // Text Theme
       textTheme: const TextTheme(
         // Headlines
@@ -230,7 +230,7 @@ class AppTheme {
           fontWeight: FontWeight.w600,
           height: 1.3,
         ),
-        
+
         // Titles
         titleLarge: TextStyle(
           color: textPrimary,
@@ -250,7 +250,7 @@ class AppTheme {
           fontWeight: FontWeight.w600,
           height: 1.4,
         ),
-        
+
         // Body
         bodyLarge: TextStyle(
           color: textPrimary,
@@ -270,7 +270,7 @@ class AppTheme {
           fontWeight: FontWeight.w400,
           height: 1.4,
         ),
-        
+
         // Labels
         labelLarge: TextStyle(
           color: textPrimary,
@@ -291,20 +291,20 @@ class AppTheme {
           height: 1.4,
         ),
       ),
-      
+
       // Icon Theme
       iconTheme: const IconThemeData(
         color: textPrimary,
         size: 24,
       ),
-      
+
       // Divider Theme
       dividerTheme: DividerThemeData(
         color: textTertiary.withValues(alpha: 0.2),
         thickness: 1,
         space: 1,
       ),
-      
+
       // List Tile Theme
       listTileTheme: const ListTileThemeData(
         textColor: textPrimary,
@@ -316,14 +316,14 @@ class AppTheme {
       ),
     );
   }
-  
+
   // Custom Gradient for special elements
   static const LinearGradient primaryGradient = LinearGradient(
     colors: [primaryColor, primaryDark],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
-  
+
   static const LinearGradient cardGradient = LinearGradient(
     colors: [cardDark, surfaceDark],
     begin: Alignment.topLeft,

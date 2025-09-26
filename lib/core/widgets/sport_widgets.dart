@@ -34,14 +34,14 @@ class SportCard extends StatelessWidget {
             padding: padding ?? const EdgeInsets.all(16),
             decoration: BoxDecoration(
               gradient: useGradient ? AppTheme.cardGradient : null,
-              color: useGradient ? null : (isSelected 
-                  ? AppTheme.primaryColor.withValues(alpha: 0.1) 
-                  : AppTheme.cardDark),
+              color: useGradient ? null : (isSelected ? AppTheme.primaryColor.withValues(alpha: 0.1) : AppTheme.cardDark),
               borderRadius: BorderRadius.circular(16),
-              border: isSelected ? Border.all(
-                color: AppTheme.primaryColor,
-                width: 2,
-              ) : null,
+              border: isSelected
+                  ? Border.all(
+                      color: AppTheme.primaryColor,
+                      width: 2,
+                    )
+                  : null,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.15),
@@ -188,7 +188,7 @@ class TeamScore extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = isHome ? AppTheme.homeTeamColor : AppTheme.awayTeamColor;
-    
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
@@ -342,12 +342,10 @@ class SportActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = backgroundColor ?? 
-        (isSecondary ? Colors.transparent : AppTheme.primaryColor);
-    final fgColor = foregroundColor ?? 
-        (isSecondary ? AppTheme.primaryColor : Colors.black);
+    final bgColor = backgroundColor ?? (isSecondary ? Colors.transparent : AppTheme.primaryColor);
+    final fgColor = foregroundColor ?? (isSecondary ? AppTheme.primaryColor : Colors.black);
 
-    Widget button = isSecondary 
+    Widget button = isSecondary
         ? OutlinedButton.icon(
             onPressed: onPressed,
             icon: Icon(icon),
@@ -391,7 +389,7 @@ class StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cardColor = color ?? AppTheme.primaryColor;
-    
+
     return SportCard(
       useGradient: true,
       child: Column(

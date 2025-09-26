@@ -36,8 +36,8 @@ class MatchCard extends StatelessWidget {
                   Text(
                     DateFormat('dd/MM/yyyy - HH:mm').format(match.matchDate),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey[600],
-                    ),
+                          color: Colors.grey[600],
+                        ),
                   ),
                   Row(
                     children: [
@@ -78,7 +78,7 @@ class MatchCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 16),
-              
+
               // Teams and score
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -90,8 +90,8 @@ class MatchCard extends StatelessWidget {
                         Text(
                           match.homeTeam,
                           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                                fontWeight: FontWeight.bold,
+                              ),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 8),
@@ -104,15 +104,15 @@ class MatchCard extends StatelessWidget {
                           child: Text(
                             '${match.homeScore}',
                             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue,
-                            ),
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue,
+                                ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  
+
                   // VS separator
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -121,9 +121,9 @@ class MatchCard extends StatelessWidget {
                         Text(
                           'VS',
                           style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            color: Colors.grey,
-                            fontWeight: FontWeight.bold,
-                          ),
+                                color: Colors.grey,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                         const SizedBox(height: 8),
                         Icon(
@@ -133,7 +133,7 @@ class MatchCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  
+
                   // Away team
                   Expanded(
                     child: Column(
@@ -141,8 +141,8 @@ class MatchCard extends StatelessWidget {
                         Text(
                           match.awayTeam,
                           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                                fontWeight: FontWeight.bold,
+                              ),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 8),
@@ -155,9 +155,9 @@ class MatchCard extends StatelessWidget {
                           child: Text(
                             '${match.awayScore}',
                             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red,
-                            ),
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red,
+                                ),
                           ),
                         ),
                       ],
@@ -166,7 +166,7 @@ class MatchCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 16),
-              
+
               // Venue
               Row(
                 children: [
@@ -176,8 +176,8 @@ class MatchCard extends StatelessWidget {
                     child: Text(
                       match.venue,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey[600],
-                      ),
+                            color: Colors.grey[600],
+                          ),
                     ),
                   ),
                 ],
@@ -192,7 +192,7 @@ class MatchCard extends StatelessWidget {
   Widget _buildStatusChip(MatchStatus status) {
     Color color;
     String label;
-    
+
     switch (status) {
       case MatchStatus.scheduled:
         color = Colors.blue;
@@ -211,7 +211,7 @@ class MatchCard extends StatelessWidget {
         label = 'Cancelada';
         break;
     }
-    
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(

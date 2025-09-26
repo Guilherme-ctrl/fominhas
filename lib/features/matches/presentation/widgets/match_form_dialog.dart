@@ -74,7 +74,7 @@ class _MatchFormDialogState extends State<MatchFormDialog> {
                   },
                 ),
                 const SizedBox(height: 16),
-                
+
                 // Away team
                 TextFormField(
                   controller: _awayTeamController,
@@ -91,7 +91,7 @@ class _MatchFormDialogState extends State<MatchFormDialog> {
                   },
                 ),
                 const SizedBox(height: 16),
-                
+
                 // Venue
                 TextFormField(
                   controller: _venueController,
@@ -108,7 +108,7 @@ class _MatchFormDialogState extends State<MatchFormDialog> {
                   },
                 ),
                 const SizedBox(height: 16),
-                
+
                 // Date picker
                 InkWell(
                   onTap: _selectDate,
@@ -124,7 +124,7 @@ class _MatchFormDialogState extends State<MatchFormDialog> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                
+
                 // Time picker
                 InkWell(
                   onTap: _selectTime,
@@ -140,7 +140,7 @@ class _MatchFormDialogState extends State<MatchFormDialog> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                
+
                 // Status
                 DropdownButtonFormField<MatchStatus>(
                   initialValue: _selectedStatus,
@@ -162,7 +162,7 @@ class _MatchFormDialogState extends State<MatchFormDialog> {
                   },
                 ),
                 const SizedBox(height: 16),
-                
+
                 // Scores (only show if status is not scheduled)
                 if (_selectedStatus != MatchStatus.scheduled) ...[
                   Row(
@@ -277,7 +277,7 @@ class _MatchFormDialogState extends State<MatchFormDialog> {
         _selectedTime.hour,
         _selectedTime.minute,
       );
-      
+
       final match = Match(
         id: widget.match?.id,
         homeTeam: _homeTeamController.text.trim(),
@@ -291,7 +291,7 @@ class _MatchFormDialogState extends State<MatchFormDialog> {
         updatedAt: widget.match != null ? now : null,
         events: widget.match?.events ?? [],
       );
-      
+
       widget.onSave(match);
       Navigator.pop(context);
     }

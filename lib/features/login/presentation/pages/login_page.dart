@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               children: [
                 const Spacer(),
-                
+
                 // Logo e branding
                 Container(
                   padding: const EdgeInsets.all(24),
@@ -87,31 +87,31 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      
+
                       // Título principal
                       Text(
                         'Fominhas',
                         style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                          color: AppTheme.textPrimary,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: -0.5,
-                        ),
+                              color: AppTheme.textPrimary,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: -0.5,
+                            ),
                       ),
                       const SizedBox(height: 8),
-                      
+
                       // Subtítulo
                       Text(
                         'Gerenciamento de Futebol Indoor',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppTheme.textSecondary,
-                          fontSize: 16,
-                        ),
+                              color: AppTheme.textSecondary,
+                              fontSize: 16,
+                            ),
                         textAlign: TextAlign.center,
                       ),
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 48),
 
                 // Botões de login
@@ -168,9 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                             ],
                           ),
                           child: ElevatedButton(
-                            onPressed: state is LoadingCubitState
-                                ? null
-                                : () => Modular.get<LoginGoogleCubit>().signInWithGoogle(),
+                            onPressed: state is LoadingCubitState ? null : () => Modular.get<LoginGoogleCubit>().signInWithGoogle(),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.transparent,
                               foregroundColor: Colors.black87,
@@ -216,9 +214,9 @@ class _LoginPageState extends State<LoginPage> {
                                 Text(
                                   'Entrar com Google',
                                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                        color: Colors.black87,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                 ),
                               ],
                             ),
@@ -236,7 +234,7 @@ class _LoginPageState extends State<LoginPage> {
                         state.whenSuccess((user) {
                           Modular.to.navigate('/home/');
                         });
-                        
+
                         state.whenError((message) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -269,9 +267,7 @@ class _LoginPageState extends State<LoginPage> {
                             ],
                           ),
                           child: ElevatedButton(
-                            onPressed: state.isLoading
-                                ? null
-                                : () => Modular.get<LoginAppleCubit>().signInWithApple(),
+                            onPressed: state.isLoading ? null : () => Modular.get<LoginAppleCubit>().signInWithApple(),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.transparent,
                               foregroundColor: Colors.white,
@@ -303,9 +299,9 @@ class _LoginPageState extends State<LoginPage> {
                                 Text(
                                   'Entrar com Apple',
                                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                 ),
                               ],
                             ),
@@ -315,9 +311,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ],
                 ),
-                
+
                 const Spacer(),
-                
+
                 // Footer
                 Padding(
                   padding: const EdgeInsets.only(bottom: 24),
@@ -326,8 +322,8 @@ class _LoginPageState extends State<LoginPage> {
                       Text(
                         'Ao continuar, você concorda com nossos',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppTheme.textTertiary,
-                        ),
+                              color: AppTheme.textTertiary,
+                            ),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 4),
@@ -345,17 +341,17 @@ class _LoginPageState extends State<LoginPage> {
                             child: Text(
                               'Termos de Uso',
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: AppTheme.primaryColor,
-                                decoration: TextDecoration.underline,
-                                decorationColor: AppTheme.primaryColor,
-                              ),
+                                    color: AppTheme.primaryColor,
+                                    decoration: TextDecoration.underline,
+                                    decorationColor: AppTheme.primaryColor,
+                                  ),
                             ),
                           ),
                           Text(
                             ' e ',
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: AppTheme.textTertiary,
-                            ),
+                                  color: AppTheme.textTertiary,
+                                ),
                           ),
                           TextButton(
                             onPressed: () {},
@@ -368,10 +364,10 @@ class _LoginPageState extends State<LoginPage> {
                             child: Text(
                               'Política de Privacidade',
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: AppTheme.primaryColor,
-                                decoration: TextDecoration.underline,
-                                decorationColor: AppTheme.primaryColor,
-                              ),
+                                    color: AppTheme.primaryColor,
+                                    decoration: TextDecoration.underline,
+                                    decorationColor: AppTheme.primaryColor,
+                                  ),
                             ),
                           ),
                         ],

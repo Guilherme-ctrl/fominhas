@@ -36,7 +36,7 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
     super.initState();
     _loadTournaments();
   }
-  
+
   @override
   void dispose() {
     _updateTimer?.cancel();
@@ -50,11 +50,11 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
   /// Compara se duas listas de torneios são iguais para evitar rebuilds desnecessários
   bool _tournamentsAreEqual(List<Tournament> list1, List<Tournament> list2) {
     if (list1.length != list2.length) return false;
-    
+
     for (int i = 0; i < list1.length; i++) {
       final t1 = list1[i];
       final t2 = list2[i];
-      
+
       // Comparar propriedades principais que podem mudar durante uma partida
       if (t1.id != t2.id ||
           t1.name != t2.name ||
@@ -64,18 +64,18 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
         return false;
       }
     }
-    
+
     return true;
   }
-  
+
   /// Compara se duas listas de partidas são iguais
   bool _matchListsAreEqual(List<TournamentMatch> list1, List<TournamentMatch> list2) {
     if (list1.length != list2.length) return false;
-    
+
     for (int i = 0; i < list1.length; i++) {
       final m1 = list1[i];
       final m2 = list2[i];
-      
+
       if (m1.id != m2.id ||
           m1.status != m2.status ||
           m1.homeScore != m2.homeScore ||
@@ -85,56 +85,44 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
         return false;
       }
     }
-    
+
     return true;
   }
 
   Tournament _updateTeamStatsAfterMatch(Tournament tournament, TournamentMatch match) {
     final homeTeam = tournament.teams.firstWhere((team) => team.id == match.homeTeamId);
     final awayTeam = tournament.teams.firstWhere((team) => team.id == match.awayTeamId);
-    
-    
+
     // Atualizar estatísticas dos times
-    final updatedHomeTeam = TournamentService.updateTeamStatsAfterMatch(
-      homeTeam, 
-      match.homeScore, 
-      match.awayScore
-    );
-    
-    final updatedAwayTeam = TournamentService.updateTeamStatsAfterMatch(
-      awayTeam, 
-      match.awayScore, 
-      match.homeScore
-    );
-    
+    final updatedHomeTeam = TournamentService.updateTeamStatsAfterMatch(homeTeam, match.homeScore, match.awayScore);
+
+    final updatedAwayTeam = TournamentService.updateTeamStatsAfterMatch(awayTeam, match.awayScore, match.homeScore);
+
     // Atualizar lista de times
     final updatedTeams = tournament.teams.map((team) {
       if (team.id == homeTeam.id) return updatedHomeTeam;
       if (team.id == awayTeam.id) return updatedAwayTeam;
       return team;
     }).toList();
-    
-    
+
     return tournament.copyWith(teams: updatedTeams);
   }
-  
+
   Tournament _checkAndFinishTournamentIfComplete(Tournament tournament) {
     // Verificar se todas as partidas foram finalizadas
-    final allMatchesFinished = tournament.matches.isNotEmpty &&
-        tournament.matches.every((match) => match.status == TournamentMatchStatus.finished);
-    
+    final allMatchesFinished = tournament.matches.isNotEmpty && tournament.matches.every((match) => match.status == TournamentMatchStatus.finished);
+
     if (allMatchesFinished && tournament.status != TournamentStatus.finished) {
-      
       // Determinar o campeão
       final winner = TournamentService.determineWinner(tournament.teams);
-      
+
       // Finalizar torneio
       final finishedTournament = tournament.copyWith(
         status: TournamentStatus.finished,
         championTeamId: winner?.id,
         updatedAt: DateTime.now(),
       );
-      
+
       // Mostrar notificação
       if (mounted) {
         final winnerName = winner?.name ?? 'Time não identificado';
@@ -151,17 +139,17 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
           ),
         );
       }
-      
+
       return finishedTournament;
     }
-    
+
     return tournament;
   }
-  
+
   void _showAddMatchDialog(Tournament tournament) {
     String? selectedHomeTeamId;
     String? selectedAwayTeamId;
-    
+
     showDialog(
       context: context,
       builder: (context) => StatefulBuilder(
@@ -175,7 +163,7 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
                 style: TextStyle(color: Colors.grey.shade700),
               ),
               const SizedBox(height: 16),
-              
+
               // Time da casa
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(
@@ -195,9 +183,9 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
                   });
                 },
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               // Time visitante
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(
@@ -225,9 +213,7 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
               child: const Text('Cancelar'),
             ),
             ElevatedButton(
-              onPressed: selectedHomeTeamId != null && 
-                         selectedAwayTeamId != null &&
-                         selectedHomeTeamId != selectedAwayTeamId
+              onPressed: selectedHomeTeamId != null && selectedAwayTeamId != null && selectedHomeTeamId != selectedAwayTeamId
                   ? () {
                       _addNewMatch(tournament, selectedHomeTeamId!, selectedAwayTeamId!);
                       Navigator.of(context).pop();
@@ -240,11 +226,11 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
       ),
     );
   }
-  
+
   void _addNewMatch(Tournament tournament, String homeTeamId, String awayTeamId) {
     final newMatchNumber = tournament.matches.length + 1;
     final baseId = DateTime.now().millisecondsSinceEpoch;
-    
+
     final newMatch = TournamentMatch(
       id: 'match_${newMatchNumber}_$baseId',
       homeTeamId: homeTeamId,
@@ -252,10 +238,10 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
       matchNumber: newMatchNumber,
       status: TournamentMatchStatus.scheduled,
     );
-    
+
     final updatedMatches = [...tournament.matches, newMatch];
     final updatedTournament = tournament.copyWith(matches: updatedMatches);
-    
+
     // Atualizar localmente
     setState(() {
       final index = _localTournaments.indexWhere((t) => t.id == tournament.id);
@@ -263,14 +249,14 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
         _localTournaments[index] = updatedTournament;
       }
     });
-    
+
     // Salvar no Firebase
     _scheduleFirebaseUpdate(updatedTournament);
-    
+
     // Mostrar notificação
     final homeTeam = tournament.teams.firstWhere((t) => t.id == homeTeamId);
     final awayTeam = tournament.teams.firstWhere((t) => t.id == awayTeamId);
-    
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Nova partida adicionada: ${homeTeam.name} vs ${awayTeam.name}'),
@@ -371,7 +357,6 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
   /// Captura foto do time vencedor
   Future<void> _captureWinnerPhoto(Tournament tournament) async {
     try {
-      
       // Mostrar loading
       showDialog(
         context: context,
@@ -390,10 +375,10 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
 
       // Capturar e converter foto para base64
       final String? photoBase64 = await PhotoService.captureWinnerPhotoAsBase64();
-      
+
       // Fechar loading
       if (mounted) Navigator.of(context).pop();
-      
+
       if (photoBase64 != null) {
         // Atualizar torneio com a foto
         final updatedTournament = tournament.copyWith(
@@ -422,10 +407,7 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
             ),
           );
         }
-        
-      } else {
-      }
-      
+      } else {}
     } catch (e) {
       // Fechar loading se ainda estiver aberto
       if (mounted) {
@@ -433,8 +415,7 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
           Navigator.of(context).pop();
         } catch (_) {}
       }
-      
-      
+
       // Mostrar erro
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -446,7 +427,7 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
       }
     }
   }
-  
+
   /// Compartilha os times do torneio
   Future<void> _shareTournamentTeams(Tournament tournament) async {
     try {
@@ -462,11 +443,10 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
       }
     }
   }
-  
+
   /// Baixa a foto do time vencedor
   Future<void> _downloadWinnerPhoto(Tournament tournament) async {
     try {
-      
       // Mostrar loading
       showDialog(
         context: context,
@@ -482,12 +462,12 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
           ),
         ),
       );
-      
+
       final success = await ShareService.downloadWinnerPhoto(tournament);
-      
+
       // Fechar loading
       if (mounted) Navigator.of(context).pop();
-      
+
       if (success) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -499,7 +479,6 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
           );
         }
       }
-      
     } catch (e) {
       // Fechar loading se ainda estiver aberto
       if (mounted) {
@@ -507,7 +486,7 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
           Navigator.of(context).pop();
         } catch (_) {}
       }
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -518,7 +497,7 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
       }
     }
   }
-  
+
   /// Compartilha a foto do time vencedor
   Future<void> _shareWinnerPhoto(Tournament tournament) async {
     try {
@@ -534,11 +513,10 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
       }
     }
   }
-  
+
   /// Compartilha torneio no Instagram Stories
   Future<void> _shareToInstagramStory(Tournament tournament) async {
     try {
-      
       // Mostrar loading
       showDialog(
         context: context,
@@ -554,12 +532,12 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
           ),
         ),
       );
-      
+
       await InstagramService.shareAsInstagramStory(tournament);
-      
+
       // Fechar loading
       if (mounted) Navigator.of(context).pop();
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -568,7 +546,6 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
           ),
         );
       }
-      
     } catch (e) {
       // Fechar loading se ainda estiver aberto
       if (mounted) {
@@ -576,7 +553,7 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
           Navigator.of(context).pop();
         } catch (_) {}
       }
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -588,11 +565,10 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
       }
     }
   }
-  
+
   /// Compartilha torneio no Instagram Post
   Future<void> _shareToInstagramPost(Tournament tournament) async {
     try {
-      
       // Mostrar loading
       showDialog(
         context: context,
@@ -608,12 +584,12 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
           ),
         ),
       );
-      
+
       await InstagramService.shareAsInstagramPost(tournament);
-      
+
       // Fechar loading
       if (mounted) Navigator.of(context).pop();
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -622,7 +598,6 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
           ),
         );
       }
-      
     } catch (e) {
       // Fechar loading se ainda estiver aberto
       if (mounted) {
@@ -630,7 +605,7 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
           Navigator.of(context).pop();
         } catch (_) {}
       }
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -686,52 +661,44 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
   }
 
   void _onEventsAdded(Tournament tournament, TournamentMatch match, List<TournamentMatchEvent> events) {
-    
     // Adicionar todos os eventos à partida
     final updatedEvents = [...match.events, ...events];
-    
+
     // Atualizar pontuação baseado nos eventos de gol
     int homeScore = match.homeScore;
     int awayScore = match.awayScore;
-    
+
     for (final event in events) {
-      
       if (event.type == TournamentMatchEventType.goal) {
         if (event.teamId == match.homeTeamId) {
           homeScore++;
         } else {
           awayScore++;
         }
-      } else {
-      }
+      } else {}
     }
-    
-    final updatedMatch = match.copyWith(
-      events: updatedEvents, 
-      homeScore: homeScore, 
-      awayScore: awayScore
-    );
-    
+
+    final updatedMatch = match.copyWith(events: updatedEvents, homeScore: homeScore, awayScore: awayScore);
+
     _onMatchUpdated(tournament, updatedMatch);
   }
 
   void _onMatchUpdated(Tournament tournament, TournamentMatch updatedMatch) {
-    
     // Atualizar partida no torneio
     final updatedMatches = tournament.matches.map((match) {
       return match.id == updatedMatch.id ? updatedMatch : match;
     }).toList();
 
     Tournament updatedTournament = tournament.copyWith(matches: updatedMatches);
-    
+
     // Se a partida foi finalizada, atualizar estatísticas dos times
     if (updatedMatch.status == TournamentMatchStatus.finished) {
       updatedTournament = _updateTeamStatsAfterMatch(updatedTournament, updatedMatch);
-      
+
       // Verificar se todas as partidas foram finalizadas para finalizar o torneio
       updatedTournament = _checkAndFinishTournamentIfComplete(updatedTournament);
     }
-    
+
     // Update local tournaments immediately for responsive UI
     setState(() {
       final index = _localTournaments.indexWhere((t) => t.id == tournament.id);
@@ -739,24 +706,24 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
         _localTournaments[index] = updatedTournament;
       }
     });
-    
+
     // Schedule Firebase update (throttled)
     _scheduleFirebaseUpdate(updatedTournament);
   }
-  
+
   void _scheduleFirebaseUpdate(Tournament tournament) {
     final now = DateTime.now();
-    
+
     // Cancel existing timer if any
     _updateTimer?.cancel();
-    
+
     // Schedule update after delay
     _updateTimer = Timer(const Duration(seconds: 10), () {
       if (mounted) {
         Modular.get<TournamentCubit>().updateTournament(tournament);
       }
     });
-    
+
     // Also update immediately if it's been a while since last update
     if (_lastUpdateTime == null || now.difference(_lastUpdateTime!) > _updateThrottle) {
       _lastUpdateTime = now;
@@ -807,13 +774,12 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
               ),
             );
           });
-          
+
           // Cache tournaments locally when loaded
           if (state.isSuccess) {
             final tournaments = CubitStateHelper.getList<Tournament>(state);
             // Só atualizar se realmente mudou (evitar rebuilds desnecessários)
-            if (_localTournaments.length != tournaments.length || 
-                !_tournamentsAreEqual(_localTournaments, tournaments)) {
+            if (_localTournaments.length != tournaments.length || !_tournamentsAreEqual(_localTournaments, tournaments)) {
               setState(() {
                 _localTournaments = List.from(tournaments);
                 // Keep only existing tournaments expanded
@@ -849,7 +815,7 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
             loading: () => const Center(child: CircularProgressIndicator()),
             success: (data) {
               final tournaments = CubitStateHelper.getList<Tournament>(state);
-              
+
               if (tournaments.isEmpty) {
                 return Center(
                   child: Column(
@@ -1074,8 +1040,7 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Foto do vencedor (se o torneio estiver finalizado)
-          if (tournament.status == TournamentStatus.finished)
-            _buildWinnerSection(tournament),
+          if (tournament.status == TournamentStatus.finished) _buildWinnerSection(tournament),
 
           // Tabela de classificação
           _buildStandingsTable(tournament),
@@ -1099,9 +1064,9 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
                 child: Text(
                   'Partidas',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: isSmallScreen ? 14.0 : null,
-                  ),
+                        fontWeight: FontWeight.bold,
+                        fontSize: isSmallScreen ? 14.0 : null,
+                      ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -1144,19 +1109,18 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
       (team) => team.id == tournament.championTeamId,
       orElse: () => TournamentService.determineWinner(tournament.teams)!,
     );
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           '🏆 Campeão',
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: AppTheme.primaryColor,
-          ),
+                fontWeight: FontWeight.bold,
+                color: AppTheme.primaryColor,
+              ),
         ),
         const SizedBox(height: 12),
-        
         SportCard(
           useGradient: true,
           child: Column(
@@ -1217,9 +1181,9 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               // Seção da foto
               if (tournament.winnerPhotoBase64 != null && tournament.winnerPhotoBase64!.isNotEmpty) ...[
                 // Foto existente (base64)
@@ -1276,7 +1240,7 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
                     textAlign: TextAlign.center,
                   ),
                 const SizedBox(height: 12),
-                
+
                 // Botão para tirar nova foto
                 SportActionButton(
                   label: 'Tirar Nova Foto',
@@ -1337,7 +1301,6 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
             ],
           ),
         ),
-        
         const SizedBox(height: 16),
         const Divider(),
         const SizedBox(height: 16),
@@ -1360,8 +1323,8 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
         Text(
           'Classificação',
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+                fontWeight: FontWeight.bold,
+              ),
         ),
         const SizedBox(height: 8),
         Container(
@@ -1383,7 +1346,7 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
                     final isSmallWidth = constraints.maxWidth < 300;
                     final columnWidth = isSmallWidth ? 24.0 : 30.0;
                     final fontSize = isSmallWidth ? 10.0 : 12.0;
-                    
+
                     return Row(
                       children: [
                         SizedBox(
@@ -1461,7 +1424,7 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
                       final isSmallWidth = constraints.maxWidth < 300;
                       final columnWidth = isSmallWidth ? 24.0 : 30.0;
                       final fontSize = isSmallWidth ? 10.0 : 12.0;
-                      
+
                       return Row(
                         children: [
                           SizedBox(
@@ -1521,49 +1484,44 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
       ],
     );
   }
-  
+
   Widget _buildTournamentStatistics(Tournament tournament) {
     // Calcular artilheiros e assistentes
     final scorers = <String, int>{}; // playerId -> goals
     final assists = <String, int>{}; // playerId -> assists
     final playerNames = <String, String>{}; // playerId -> playerName
-    
-    
+
     // Processar todos os eventos de gol e assistência
     for (final match in tournament.matches) {
       for (final event in match.events) {
         final playerId = event.playerId;
-        
+
         if (playerId.isNotEmpty) {
           // Find player name by searching through all teams
           String? playerName;
           for (final team in tournament.teams) {
             // Buscar por ID real primeiro
             Player? player = team.players.where((p) => p.id == playerId).firstOrNull;
-            
+
             // Se não encontrou por ID real, buscar por ID baseado no nome
-            player ??= team.players.where((p) => 
-              (p.id == null || p.id!.isEmpty) && 
-              p.name.replaceAll(' ', '_').toLowerCase() == playerId
-            ).firstOrNull;
-            
+            player ??=
+                team.players.where((p) => (p.id == null || p.id!.isEmpty) && p.name.replaceAll(' ', '_').toLowerCase() == playerId).firstOrNull;
+
             // Também verificar nas reservas
             player ??= team.reserves.where((p) => p.id == playerId).firstOrNull;
-            
-            player ??= team.reserves.where((p) => 
-              (p.id == null || p.id!.isEmpty) && 
-              p.name.replaceAll(' ', '_').toLowerCase() == playerId
-            ).firstOrNull;
-            
+
+            player ??=
+                team.reserves.where((p) => (p.id == null || p.id!.isEmpty) && p.name.replaceAll(' ', '_').toLowerCase() == playerId).firstOrNull;
+
             if (player != null) {
               playerName = player.name;
               break;
             }
           }
-          
+
           if (playerName != null) {
             playerNames[playerId] = playerName;
-            
+
             if (event.type == TournamentMatchEventType.goal) {
               final newCount = (scorers[playerId] ?? 0) + 1;
               scorers[playerId] = newCount;
@@ -1575,27 +1533,23 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
         }
       }
     }
-    
+
     // Ordenar artilheiros (maior número de gols primeiro)
-    final topScorers = scorers.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
-    
+    final topScorers = scorers.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+
     // Ordenar assistentes (maior número de assistências primeiro)
-    final topAssists = assists.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
-    
-    
+    final topAssists = assists.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Estatísticas',
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+                fontWeight: FontWeight.bold,
+              ),
         ),
         const SizedBox(height: 12),
-        
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -1603,10 +1557,13 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
             Expanded(
               child: _buildStatColumn(
                 'Artilheiros',
-                topScorers.take(5).map((entry) => {
-                  'name': playerNames[entry.key] ?? 'Desconhecido',
-                  'value': '${entry.value} gols',
-                }).toList(),
+                topScorers
+                    .take(5)
+                    .map((entry) => {
+                          'name': playerNames[entry.key] ?? 'Desconhecido',
+                          'value': '${entry.value} gols',
+                        })
+                    .toList(),
               ),
             ),
             const SizedBox(width: 16),
@@ -1614,10 +1571,13 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
             Expanded(
               child: _buildStatColumn(
                 'Assistentes',
-                topAssists.take(5).map((entry) => {
-                  'name': playerNames[entry.key] ?? 'Desconhecido',
-                  'value': '${entry.value} assist.',
-                }).toList(),
+                topAssists
+                    .take(5)
+                    .map((entry) => {
+                          'name': playerNames[entry.key] ?? 'Desconhecido',
+                          'value': '${entry.value} assist.',
+                        })
+                    .toList(),
               ),
             ),
           ],
@@ -1625,7 +1585,7 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
       ],
     );
   }
-  
+
   Widget _buildStatColumn(String title, List<Map<String, String>> stats) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1661,7 +1621,7 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
                     final stat = entry.value;
                     final isFirst = index == 0;
                     final isLast = index == stats.length - 1;
-                    
+
                     return Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -1669,9 +1629,7 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
                       ),
                       decoration: BoxDecoration(
                         color: isFirst ? Colors.amber.shade50 : null,
-                        border: !isLast
-                            ? Border(bottom: BorderSide(color: Colors.grey.shade200))
-                            : null,
+                        border: !isLast ? Border(bottom: BorderSide(color: Colors.grey.shade200)) : null,
                         borderRadius: isFirst && isLast
                             ? BorderRadius.circular(8)
                             : isFirst
@@ -1728,7 +1686,7 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
         final index = entry.key;
         final match = entry.value;
         final isSelected = selectedMatchIndex == index;
-        
+
         return _buildMatchCard(tournament, match, index, isSelected);
       }).toList(),
     );
@@ -1739,7 +1697,7 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
       (team) => team.id == match.homeTeamId,
       orElse: () => TournamentTeam(id: '', name: 'Time não encontrado', players: [], reserves: []),
     );
-    
+
     final awayTeam = tournament.teams.firstWhere(
       (team) => team.id == match.awayTeamId,
       orElse: () => TournamentTeam(id: '', name: 'Time não encontrado', players: [], reserves: []),
@@ -1748,16 +1706,15 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: isSelected 
-          ? Theme.of(context).colorScheme.surfaceContainerHigh.withValues(alpha: 0.7)
-          : Theme.of(context).colorScheme.surfaceContainer,
+        color:
+            isSelected ? Theme.of(context).colorScheme.surfaceContainerHigh.withValues(alpha: 0.7) : Theme.of(context).colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(12),
-        border: isSelected 
-          ? Border.all(
-              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
-              width: 1,
-            )
-          : null,
+        border: isSelected
+            ? Border.all(
+                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
+                width: 1,
+              )
+            : null,
       ),
       child: Column(
         children: [
@@ -1864,7 +1821,7 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
                 endTime: DateTime.now(),
               );
               _onMatchUpdated(tournament, finishedMatch);
-              
+
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Partida finalizada e estatísticas atualizadas!'),
@@ -1873,9 +1830,9 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
               );
             },
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           // Match Events
           MatchEvents(
             match: match,
