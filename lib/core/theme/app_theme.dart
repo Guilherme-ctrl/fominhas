@@ -24,10 +24,13 @@ class AppTheme {
   static const Color infoColor = Color(0xFF1F6FEB);         // Blue
   
   // Sport Specific Colors
-  static const Color homeTeamColor = Color(0xFF1F6FEB);     // Blue for home team
-  static const Color awayTeamColor = Color(0xFFDA3633);     // Red for away team
+  static const Color neutralTeamColor = Color(0xFF8B949E);  // Neutral gray for teams
   static const Color goalColor = Color(0xFF2EA043);         // Green for goals
   static const Color assistColor = Color(0xFFD29922);       // Orange for assists
+  
+  // Deprecated - keeping for compatibility but using neutral color
+  static const Color homeTeamColor = neutralTeamColor;
+  static const Color awayTeamColor = neutralTeamColor;
 
   static ThemeData get darkTheme {
     return ThemeData(

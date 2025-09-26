@@ -47,6 +47,48 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
     Modular.get<TournamentCubit>().loadTournaments();
   }
 
+  /// Compara se duas listas de torneios são iguais para evitar rebuilds desnecessários
+  bool _tournamentsAreEqual(List<Tournament> list1, List<Tournament> list2) {
+    if (list1.length != list2.length) return false;
+    
+    for (int i = 0; i < list1.length; i++) {
+      final t1 = list1[i];
+      final t2 = list2[i];
+      
+      // Comparar propriedades principais que podem mudar durante uma partida
+      if (t1.id != t2.id ||
+          t1.name != t2.name ||
+          t1.status != t2.status ||
+          t1.matches.length != t2.matches.length ||
+          !_matchListsAreEqual(t1.matches, t2.matches)) {
+        return false;
+      }
+    }
+    
+    return true;
+  }
+  
+  /// Compara se duas listas de partidas são iguais
+  bool _matchListsAreEqual(List<TournamentMatch> list1, List<TournamentMatch> list2) {
+    if (list1.length != list2.length) return false;
+    
+    for (int i = 0; i < list1.length; i++) {
+      final m1 = list1[i];
+      final m2 = list2[i];
+      
+      if (m1.id != m2.id ||
+          m1.status != m2.status ||
+          m1.homeScore != m2.homeScore ||
+          m1.awayScore != m2.awayScore ||
+          m1.elapsedMinutes != m2.elapsedMinutes ||
+          m1.elapsedSeconds != m2.elapsedSeconds) {
+        return false;
+      }
+    }
+    
+    return true;
+  }
+
   Tournament _updateTeamStatsAfterMatch(Tournament tournament, TournamentMatch match) {
     final homeTeam = tournament.teams.firstWhere((team) => team.id == match.homeTeamId);
     final awayTeam = tournament.teams.firstWhere((team) => team.id == match.awayTeamId);
@@ -769,13 +811,17 @@ class _TournamentsManagementPageState extends State<TournamentsManagementPage> {
           // Cache tournaments locally when loaded
           if (state.isSuccess) {
             final tournaments = CubitStateHelper.getList<Tournament>(state);
-            setState(() {
-              _localTournaments = List.from(tournaments);
-              // Keep only existing tournaments expanded
-              final existingIds = tournaments.map((t) => t.id).toSet();
-              expandedTournaments.removeWhere((id, _) => !existingIds.contains(id));
-              selectedMatches.removeWhere((id, _) => !existingIds.contains(id));
-            });
+            // Só atualizar se realmente mudou (evitar rebuilds desnecessários)
+            if (_localTournaments.length != tournaments.length || 
+                !_tournamentsAreEqual(_localTournaments, tournaments)) {
+              setState(() {
+                _localTournaments = List.from(tournaments);
+                // Keep only existing tournaments expanded
+                final existingIds = tournaments.map((t) => t.id).toSet();
+                expandedTournaments.removeWhere((id, _) => !existingIds.contains(id));
+                selectedMatches.removeWhere((id, _) => !existingIds.contains(id));
+              });
+            }
           }
         },
         builder: (context, state) {

@@ -145,8 +145,28 @@ class TournamentCubit extends Cubit<CubitState> with CubitLoggingMixin {
       },
       (result) {
         _currentTournament = result;
+        
+        // Se o estado atual é uma lista de torneios, atualizar o item na lista
+        if (state.isSuccess) {
+          try {
+            final currentTournaments = CubitStateHelper.getList<Tournament>(state);
+            if (currentTournaments.isNotEmpty) {
+              // Encontrar e atualizar o torneio na lista
+              final updatedTournaments = currentTournaments.map((t) {
+                return t.id == result.id ? result : t;
+              }).toList();
+              
+              emit(CubitStateHelper.successList(updatedTournaments));
+              return;
+            }
+          } catch (e) {
+            // Se não conseguiu tratar como lista, continua com single value
+          }
+        }
+        
+        // Fallback: emitir como valor único se não era uma lista
         emit(CubitState.success(value: result));
-
+        
         // Log através do mixin
       },
     );

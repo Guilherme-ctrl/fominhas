@@ -109,7 +109,6 @@ class MatchesCubit extends Cubit<CubitState> with CubitLoggingMixin {
       },
     );
   }
-
 }
 
 // Estados customizados foram removidos em favor do CubitState padrão

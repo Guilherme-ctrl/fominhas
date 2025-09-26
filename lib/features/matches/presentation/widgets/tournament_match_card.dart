@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../tournament/domain/entities/tournament.dart';
 
 class TournamentMatchCard extends StatelessWidget {
@@ -21,7 +22,7 @@ class TournamentMatchCard extends StatelessWidget {
       (team) => team.id == match.homeTeamId,
       orElse: () => TournamentTeam(id: '', name: 'Time não encontrado', players: [], reserves: []),
     );
-    
+
     final awayTeam = tournament.teams.firstWhere(
       (team) => team.id == match.awayTeamId,
       orElse: () => TournamentTeam(id: '', name: 'Time não encontrado', players: [], reserves: []),
@@ -67,9 +68,9 @@ class TournamentMatchCard extends StatelessWidget {
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 12),
-              
+
               // Times e placar
               Row(
                 children: [
@@ -88,22 +89,21 @@ class TournamentMatchCard extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
-                            color: Colors.blue.shade100,
+                            color: AppTheme.neutralTeamColor.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
                             match.homeScore.toString(),
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: Colors.blue.shade800,
+                              color: AppTheme.neutralTeamColor,
                             ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
@@ -128,7 +128,6 @@ class TournamentMatchCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  
                   Expanded(
                     child: Column(
                       children: [
@@ -144,15 +143,15 @@ class TournamentMatchCard extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
-                            color: Colors.red.shade100,
+                            color: AppTheme.neutralTeamColor.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
                             match.awayScore.toString(),
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: Colors.red.shade800,
+                              color: AppTheme.neutralTeamColor,
                             ),
                           ),
                         ),
@@ -161,9 +160,9 @@ class TournamentMatchCard extends StatelessWidget {
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 12),
-              
+
               // Status e botão de ação
               Row(
                 children: [
@@ -183,9 +182,7 @@ class TournamentMatchCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  
                   const Spacer(),
-                  
                   if (match.status != TournamentMatchStatus.finished && onManage != null)
                     ElevatedButton.icon(
                       onPressed: onManage,
@@ -206,7 +203,7 @@ class TournamentMatchCard extends StatelessWidget {
                     ),
                 ],
               ),
-              
+
               // Eventos recentes
               if (match.events.isNotEmpty) ...[
                 const SizedBox(height: 8),
@@ -222,26 +219,26 @@ class TournamentMatchCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 ...match.events.take(2).map((event) => Padding(
-                  padding: const EdgeInsets.only(bottom: 2),
-                  child: Row(
-                    children: [
-                      Text(
-                        '${event.minute}:${event.second.toString().padLeft(2, '0')}',
-                        style: const TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      padding: const EdgeInsets.only(bottom: 2),
+                      child: Row(
+                        children: [
+                          Text(
+                            '${event.minute}:${event.second.toString().padLeft(2, '0')}',
+                            style: const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          const Icon(Icons.sports_soccer, size: 12),
+                          const SizedBox(width: 4),
+                          Text(
+                            event.playerName,
+                            style: const TextStyle(fontSize: 11),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 6),
-                      const Icon(Icons.sports_soccer, size: 12),
-                      const SizedBox(width: 4),
-                      Text(
-                        event.playerName,
-                        style: const TextStyle(fontSize: 11),
-                      ),
-                    ],
-                  ),
-                )),
+                    )),
               ],
             ],
           ),

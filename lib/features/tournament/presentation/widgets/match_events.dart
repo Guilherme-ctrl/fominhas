@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../players/domain/entities/player.dart';
 import '../../domain/entities/tournament.dart';
 import '../../domain/services/tournament_service.dart';
@@ -29,22 +30,21 @@ class _MatchEventsState extends State<MatchEvents> {
   void _showGoalDialog(TournamentTeam team) {
     showDialog(
       context: context,
-      builder:
-          (context) => _GoalDialog(
-            team: team,
-            currentMinute: widget.currentMinute,
-            currentSecond: widget.currentSecond,
-            onGoalScored: (events) {
-              widget.onEventAdded(widget.match, events);
-            },
-          ),
+      builder: (context) => _GoalDialog(
+        team: team,
+        currentMinute: widget.currentMinute,
+        currentSecond: widget.currentSecond,
+        onGoalScored: (events) {
+          widget.onEventAdded(widget.match, events);
+        },
+      ),
     );
   }
 
   Widget _buildTeamGoalButton(TournamentTeam team, bool isHome) {
     final score = isHome ? widget.match.homeScore : widget.match.awayScore;
-    final color = isHome ? Colors.blue : Colors.red;
-    
+    // Usar cor neutra para ambos os times
+    final color = AppTheme.neutralTeamColor;
 
     return Expanded(
       child: Container(
@@ -63,7 +63,7 @@ class _MatchEventsState extends State<MatchEvents> {
               final teamNameFontSize = isSmallButton ? 12.0 : 16.0;
               final scoreFontSize = isSmallButton ? 18.0 : 24.0;
               final goalTextFontSize = isSmallButton ? 10.0 : 12.0;
-              
+
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -121,57 +121,53 @@ class _MatchEventsState extends State<MatchEvents> {
     }
 
     return Column(
-      children:
-          widget.match.events.map((event) {
-            final isHomeTeam = event.teamId == widget.homeTeam.id;
-            final teamColor = isHomeTeam ? Colors.blue : Colors.red;
+      children: widget.match.events.map((event) {
+        // Usar cor neutra para todos os eventos
+        final teamColor = AppTheme.neutralTeamColor;
 
-            return Container(
-              margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: teamColor.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: teamColor.withValues(alpha: 0.3)),
+        return Container(
+          margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: teamColor.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: teamColor.withValues(alpha: 0.3)),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(color: teamColor, borderRadius: BorderRadius.circular(4)),
+                child: Text(
+                  '${event.minute}:${event.second.toString().padLeft(2, '0')}',
+                  style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                ),
               ),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(color: teamColor, borderRadius: BorderRadius.circular(4)),
-                    child: Text(
-                      '${event.minute}:${event.second.toString().padLeft(2, '0')}',
-                      style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Icon(
-                    event.type == TournamentMatchEventType.goal 
-                        ? Icons.sports_soccer 
-                        : Icons.handshake,
-                    size: 20,
-                    color: event.type == TournamentMatchEventType.goal 
-                        ? Colors.green 
-                        : Colors.orange,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (event.type == TournamentMatchEventType.goal)
-                          Text('⚽ Gol de ${event.playerName}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14))
-                        else if (event.type == TournamentMatchEventType.assist)
-                          Text('🤝 Assistência de ${event.playerName}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.orange)),
-                        if (event.type == TournamentMatchEventType.goal && event.assistPlayerName != null)
-                          Text('👥 Assistência: ${event.assistPlayerName}', style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
-                      ],
-                    ),
-                  ),
-                ],
+              const SizedBox(width: 12),
+              Icon(
+                event.type == TournamentMatchEventType.goal ? Icons.sports_soccer : Icons.handshake,
+                size: 20,
+                color: event.type == TournamentMatchEventType.goal ? Colors.green : Colors.orange,
               ),
-            );
-          }).toList(),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (event.type == TournamentMatchEventType.goal)
+                      Text('⚽ Gol de ${event.playerName}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14))
+                    else if (event.type == TournamentMatchEventType.assist)
+                      Text('🤝 Assistência de ${event.playerName}',
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.orange)),
+                    if (event.type == TournamentMatchEventType.goal && event.assistPlayerName != null)
+                      Text('👥 Assistência: ${event.assistPlayerName}', style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      }).toList(),
     );
   }
 
@@ -186,7 +182,7 @@ class _MatchEventsState extends State<MatchEvents> {
     final vsPadding = isSmallScreen ? 8.0 : 12.0;
     final vsSpacing = isSmallScreen ? 8.0 : 16.0;
     final vsFontSize = isSmallScreen ? 14.0 : 18.0;
-    
+
     return Container(
       margin: EdgeInsets.all(cardMargin),
       decoration: BoxDecoration(
@@ -286,12 +282,11 @@ class _GoalDialogState extends State<_GoalDialog> {
     }
 
     // Debug: mostrar informações do jogador selecionado
-    
+
     // Garantir que temos um ID válido para o jogador que marcou o gol
     final playerId = selectedScorer!.id ?? selectedScorer!.name.replaceAll(' ', '_').toLowerCase();
 
     // Assist player validation handled below when creating events
-
 
     // Criar evento de gol
     final goalEvent = TournamentService.createGoalEvent(
@@ -304,14 +299,13 @@ class _GoalDialogState extends State<_GoalDialog> {
       assistPlayerName: selectedAssist?.name,
     );
 
-    
     // Criar lista de eventos para adicionar
     final eventsToAdd = <TournamentMatchEvent>[goalEvent];
-    
+
     // Criar evento de assistência separado se houver
     if (selectedAssist != null) {
       final assistPlayerId = selectedAssist!.id ?? selectedAssist!.name.replaceAll(' ', '_').toLowerCase();
-      
+
       final assistEvent = TournamentMatchEvent(
         id: 'event_assist_${DateTime.now().microsecondsSinceEpoch}',
         playerId: assistPlayerId,
@@ -321,12 +315,12 @@ class _GoalDialogState extends State<_GoalDialog> {
         second: widget.currentSecond,
         type: TournamentMatchEventType.assist,
       );
-      
+
       eventsToAdd.add(assistEvent);
     }
-    
+
     widget.onGoalScored(eventsToAdd);
-    
+
     Navigator.of(context).pop();
 
     // Mostrar confirmação
@@ -382,15 +376,21 @@ class _GoalDialogState extends State<_GoalDialog> {
           children: [
             Container(
               padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(color: Colors.blue.shade50, borderRadius: BorderRadius.circular(8)),
+              decoration: BoxDecoration(
+                color: AppTheme.neutralTeamColor.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.access_time, color: Colors.blue),
+                  Icon(Icons.access_time, color: AppTheme.neutralTeamColor),
                   const SizedBox(width: 8),
                   Text(
                     'Tempo: ${TournamentService.formatMatchTime(widget.currentMinute, widget.currentSecond)}',
-                    style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.neutralTeamColor,
+                    ),
                   ),
                 ],
               ),
